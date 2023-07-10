@@ -11,7 +11,6 @@ from flask_gravatar import Gravatar
 from functools import wraps
 import os
 
-
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get("secret_key")
 ckeditor = CKEditor(app)
@@ -78,7 +77,7 @@ class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.Text, nullable=False)
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    comment_author=relationship("User", back_populates="comments")
+    comment_author = relationship("User", back_populates="comments")
     post_id = db.Column(db.Integer, db.ForeignKey('blog_posts.id'))
     parent_post = relationship("BlogPost", back_populates="comments")
 
@@ -154,10 +153,10 @@ def show_post(post_id):
         if not current_user.is_authenticated:
             flash("You need to login or register to comment.")
             return redirect(url_for("login"))
-        new_comment=Comment()
-        new_comment.text=comment_form.comment_text.data
-        new_comment.comment_author=current_user
-        new_comment.parent_post=requested_post
+        new_comment = Comment()
+        new_comment.text = comment_form.comment_text.data
+        new_comment.comment_author = current_user
+        new_comment.parent_post = requested_post
 
         db.session.add(new_comment)
         db.session.commit()
